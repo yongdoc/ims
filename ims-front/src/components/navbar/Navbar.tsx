@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
@@ -26,20 +27,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    setIsOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    console.log(`Scrolled to ${id}`);
-  };
-
   const navItems = [
-    { label: "Home", id: "home" },
-    { label: "Product", id: "product" },
-    { label: "Inventory", id: "inventory" },
-    { label: "Rack", id: "rack" },
+    { label: "Home", id: "home", page: "/" },
+    { label: "Product", id: "product", page: "/products" },
+    { label: "Inventory", id: "inventory", page: "/inventories" },
+    { label: "Rack", id: "rack", page: "/racks" },
   ];
 
   return (
@@ -49,9 +41,9 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                href={item.page}
                 className={`text-sm font-medium transaction-colors ${
                   activeSection === item.id
                     ? "text-blue-500"
@@ -59,7 +51,7 @@ export default function Navbar() {
                 }`}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
           </div>
 
@@ -88,9 +80,9 @@ export default function Navbar() {
         {isOpen && (
           <div className="md:hidden border-t border-slate-800 py-4 space-y-2">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                href={item.page}
                 className={`block w-full text-left px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   activeSection === item.id
                     ? 'text-sky-400 bg-slate-900'
@@ -98,7 +90,7 @@ export default function Navbar() {
                 }`}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
           </div>
         )}
