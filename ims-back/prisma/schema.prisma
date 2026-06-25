@@ -1,0 +1,39 @@
+datasource db {
+    provider = "postgresql"
+}
+
+model Product {
+    id          String          @id @default(uuid())
+    name        String
+    sku         String
+    category    String          @default("other")
+    description String
+    image_url   String
+    created_at  DateTime        @default(now()) @db.Timestamptz(6)
+    updated_at  DateTime        @db.Timestamptz(6)
+    inventories Inventory[]
+    prdCategory ProductCategory @relation(fields: [category], references: [category])
+}
+
+model ProductCategory {
+    category String    @unique
+    products Product[]
+}
+
+model Rack {
+    id          String      @id @default(uuid())
+    name        String
+    created_at  DateTime    @default(now()) @db.Timestamptz(6)
+    updated_at  DateTime    @db.Timestamptz(6)
+    inventories Inventory[]
+}
+
+model Inventory {
+    id         String   @id @default(uuid())
+    product_id String   @default(uuid())
+    rack_id    String   @default(uuid())
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+    updated_at DateTime @db.Timestamptz(6)
+    product    Product  @relation(fields: [product_id], references: [id])
+    rack       Rack     @relation(fields: [rack_id], references: [id])
+}
